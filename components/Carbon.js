@@ -276,7 +276,7 @@ class Carbon extends React.PureComponent {
             .container {
               position: relative;
               min-width: ${config.widthAdjustment ? '90px' : 'auto'};
-              max-width: ${config.widthAdjustment ? '1365px' : 'none'};
+              max-width: ${config.widthAdjustment ? '1080px' : 'none'};
               ${config.widthAdjustment ? '' : `width: ${clampWidth(config.width)}px;`}
               padding: ${config.paddingVertical} ${config.paddingHorizontal};
             }
