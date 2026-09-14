@@ -20,7 +20,7 @@ const colorPresets = []
 const HighlightPicker = ({ title, onChange, color }) => (
   <div className="color-picker-container">
     <div className="color-picker-header">
-      <span className="capitalize">{t(`highlight.${title}`)}</span>
+      <span className="capitalize">{title}</span>
     </div>
     <ColorPicker
       key={title}
@@ -98,7 +98,7 @@ const ThemeCreate = ({
                 background={highlight === key ? COLORS.HOVER : COLORS.BLACK}
               >
                 <div className="row">
-                  <span className="capitalize">{t(`highlight.${key}`)}</span>
+                  <span className="capitalize">{key}</span>
                   <span
                     className="color-square"
                     style={{

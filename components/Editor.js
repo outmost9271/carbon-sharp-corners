@@ -39,20 +39,6 @@ import domtoimage from '../lib/dom-to-image'
 
 const languageIcon = <LanguageIcon />
 
-// 语言下拉中的通用项（Auto / Plain Text）按界面语言显示
-const translatedLanguageCache = new Map()
-const displayLanguage = lang => {
-  if (!lang) return lang
-  if (!translatedLanguageCache.has(lang)) {
-    let name = lang.name
-    if (name === 'Auto') name = t('language.auto')
-    else if (name === 'Plain Text') name = t('language.plainText')
-    translatedLanguageCache.set(lang, name === lang.name ? lang : { ...lang, name })
-  }
-  return translatedLanguageCache.get(lang)
-}
-const LANGUAGE_LIST = LANGUAGES.map(displayLanguage)
-
 const SnippetToolbar = dynamic(() => import('./SnippetToolbar'), {
   loading: () => null,
 })
@@ -364,13 +350,13 @@ class Editor extends React.Component {
           <Dropdown
             title={t('editor.language')}
             icon={languageIcon}
-            selected={displayLanguage(
+            selected={
               LANGUAGE_NAME_HASH[language] ||
-                LANGUAGE_MIME_HASH[language] ||
-                LANGUAGE_MODE_HASH[language] ||
-                LANGUAGE_MODE_HASH[DEFAULT_LANGUAGE]
-            )}
-            list={LANGUAGE_LIST}
+              LANGUAGE_MIME_HASH[language] ||
+              LANGUAGE_MODE_HASH[language] ||
+              LANGUAGE_MODE_HASH[DEFAULT_LANGUAGE]
+            }
+            list={LANGUAGES}
             onChange={this.updateLanguage}
           />
           <div className="toolbar-second-row">
