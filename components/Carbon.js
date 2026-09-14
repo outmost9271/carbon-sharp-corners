@@ -496,12 +496,49 @@ function useShowInvisiblesLoader() {
   React.useEffect(() => void require('cm-show-invisibles'), [])
 }
 
+// CodeMirror positions every line based on the line height it measured.
+// The editor fonts are loaded asynchronously (font-display: swap), which changes
+// the real line height after CodeMirror has already measured it. Without a
+// refresh the lines keep the old offsets, so the cursor, the selection and the
+// exported image drift apart from the rendered code. Refresh when the font
+// loader reports that loading finished and also a few times shortly after
+// mount, to cover fonts that were already cached.
+function useFontLoadRefresh(props, editorRef) {
+  const fontFamily = props.config && props.config.fontFamily
+  const fontSize = props.config && props.config.fontSize
+
+  React.useEffect(() => {
+    if (typeof document === 'undefined' || !document.fonts) return undefined
+
+    let cancelled = false
+    const refresh = () => {
+      if (cancelled) return
+      const editor = editorRef.current && editorRef.current.editor
+      if (editor) editor.refresh()
+    }
+
+    const fontSet = document.fonts
+    const canListen = typeof fontSet.addEventListener === 'function'
+    if (canListen) fontSet.addEventListener('loadingdone', refresh)
+
+    // 字体可能已经加载完成（事件已错过），稍后几秒内再栈底刷新几次
+    const timers = [300, 1000, 3000].map(ms => setTimeout(refresh, ms))
+
+    return () => {
+      cancelled = true
+      if (canListen) fontSet.removeEventListener('loadingdone', refresh)
+      timers.forEach(clearTimeout)
+    }
+  }, [fontFamily, fontSize, editorRef])
+}
+
 function CarbonContainer(props, ref) {
   useModeLoader()
   useHighlightLoader()
   useShowInvisiblesLoader()
   const editorRef = React.createRef()
   const onGutterClick = useSelectedLines(props, editorRef)
+  useFontLoadRefresh(props, editorRef)
 
   return <Carbon {...props} innerRef={ref} editorRef={editorRef} onGutterClick={onGutterClick} />
 }

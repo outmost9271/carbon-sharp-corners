@@ -104,6 +104,16 @@ class Editor extends React.Component {
       exportSize = (EXPORT_SIZES_HASH[this.state.exportSize] || DEFAULT_EXPORT_SIZE).value,
     } = { format: 'png' }
   ) => {
+    // CodeMirror stores the offset of every line based on the line height it
+    // measured. Webfonts load asynchronously and change that height, so make
+    // sure the editor re-measures before the DOM is cloned. Otherwise copied
+    // and exported images contain overlapping or spaced out code.
+    const cmElement =
+      this.carbonNode.current && this.carbonNode.current.querySelector('.CodeMirror')
+    if (cmElement && cmElement.CodeMirror) {
+      cmElement.CodeMirror.refresh()
+    }
+
     const node = this.carbonNode.current
 
     const width = node.offsetWidth * exportSize
