@@ -13,6 +13,8 @@ import { Spinner } from './Spinner'
 import WindowControls from './WindowControls'
 import WidthHandler from './WidthHandler'
 import { t } from '../lib/i18n'
+import { COMMON_MODES } from '../lib/common-modes-list'
+import { COMMON_HIGHLIGHT_LANGUAGES } from '../lib/highlight-languages-common'
 
 import {
   COLORS,
@@ -401,6 +403,12 @@ class Carbon extends React.PureComponent {
   }
 }
 
+// 常用语言的 highlight.js 语言包已静态打包，模块加载时同步注册，
+// 使首屏渲染的「自动检测」立即得到结果，无需等待异步 chunk
+COMMON_HIGHLIGHT_LANGUAGES.forEach(([name, language]) =>
+  hljs.registerLanguage(name, language)
+)
+
 let modesLoaded = false
 function useModeLoader(onLoaded) {
   const onLoadedRef = React.useRef(onLoaded)
@@ -412,8 +420,18 @@ function useModeLoader(onLoaded) {
       return
     }
 
+    // 常用 mode 已打包进主 bundle，同步加载（仅客户端执行；codemirror 依赖
+    // 浏览器 API，不能参与 SSR），使首次渲染后几毫秒内就有高亮
+    require('../lib/codemirror-modes-common')
+    if (onLoadedRef.current) onLoadedRef.current()
+
+    // 其余语言在后台异步加载
     const languages = LANGUAGES.filter(
-      language => language.mode && language.mode !== 'auto' && language.mode !== 'text'
+      language =>
+        language.mode &&
+        language.mode !== 'auto' &&
+        language.mode !== 'text' &&
+        COMMON_MODES.indexOf(language.mode) < 0
     )
 
     // webpack 把这些 require 编译成异步 chunk；等它们真正加载完成后再同步 mode，
