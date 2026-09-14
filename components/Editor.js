@@ -111,7 +111,10 @@ class Editor extends React.Component {
     const cmElement =
       this.carbonNode.current && this.carbonNode.current.querySelector('.CodeMirror')
     if (cmElement && cmElement.CodeMirror) {
-      cmElement.CodeMirror.refresh()
+      const editor = cmElement.CodeMirror
+      // 清除行状态缓存，保证高亮使用当前 mode 后再抓取 DOM
+      editor.setOption('mode', editor.getOption('mode'))
+      editor.refresh()
     }
 
     const node = this.carbonNode.current

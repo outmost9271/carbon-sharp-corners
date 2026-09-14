@@ -146,19 +146,35 @@ class Carbon extends React.PureComponent {
     }
   }
 
+  // 语言可能来自自动检测（highlight.js），异步就绪后需要重新计算
+  getLanguageMode = () => {
+    const config = { ...DEFAULT_SETTINGS, ...this.props.config }
+    return (
+      this.handleLanguageChange(
+        this.props.children,
+        config.language && config.language.toLowerCase()
+      ) || 'plaintext'
+    )
+  }
+
+  // CodeMirror 的 mode chunks、highlight.js 语言包与 webfont 都是异步加载的。
+  // 它们就绪后重新计算 mode，并让 CodeMirror 重新解析文档；否则首屏渲染时
+  // 缓存的空 mode（"auto"）会一直保留，表现为代码没有语法高亮。
+  syncEditor = () => {
+    const editor = this.props.editorRef.current && this.props.editorRef.current.editor
+    if (!editor) return
+    editor.setOption('mode', this.getLanguageMode())
+    editor.refresh()
+  }
+
   render() {
     const config = { ...DEFAULT_SETTINGS, ...this.props.config }
-
-    const languageMode = this.handleLanguageChange(
-      this.props.children,
-      config.language && config.language.toLowerCase()
-    )
 
     const options = {
       screenReaderLabel: t('editor.codeEditor'),
       lineNumbers: config.lineNumbers,
       firstLineNumber: config.firstLineNumber,
-      mode: languageMode || 'plaintext',
+      mode: this.getLanguageMode(),
       theme: config.theme,
       scrollbarStyle: null,
       viewportMargin: Infinity,
@@ -386,34 +402,56 @@ class Carbon extends React.PureComponent {
 }
 
 let modesLoaded = false
-function useModeLoader() {
+function useModeLoader(onLoaded) {
+  const onLoadedRef = React.useRef(onLoaded)
+  onLoadedRef.current = onLoaded
+
   React.useEffect(() => {
-    if (!modesLoaded) {
-      // Load Codemirror add-ons
-      require('../lib/custom/autoCloseBrackets')
-      // Load Codemirror modes
-      LANGUAGES.filter(
-        language => language.mode && language.mode !== 'auto' && language.mode !== 'text'
-      ).forEach(language => {
-        language.custom
-          ? require(`../lib/custom/modes/${language.mode}`)
-          : require(`codemirror/mode/${language.mode}/${language.mode}`)
-      })
-      modesLoaded = true
+    if (modesLoaded) {
+      if (onLoadedRef.current) onLoadedRef.current()
+      return
     }
+
+    const languages = LANGUAGES.filter(
+      language => language.mode && language.mode !== 'auto' && language.mode !== 'text'
+    )
+
+    // webpack 把这些 require 编译成异步 chunk；等它们真正加载完成后再同步 mode，
+    // 否则首次渲染会用空的 mode 解析整个文档并缓存下来
+    Promise.all([
+      import('../lib/custom/autoCloseBrackets'),
+      ...languages.map(language =>
+        language.custom
+          ? import(`../lib/custom/modes/${language.mode}`)
+          : import(`codemirror/mode/${language.mode}/${language.mode}`)
+      ),
+    ])
+      .catch(() => {})
+      .then(() => {
+        modesLoaded = true
+        if (onLoadedRef.current) onLoadedRef.current()
+      })
   }, [])
 }
 
 let highLightsLoaded = false
-function useHighlightLoader() {
+function useHighlightLoader(onLoaded) {
+  const onLoadedRef = React.useRef(onLoaded)
+  onLoadedRef.current = onLoaded
+
   React.useEffect(() => {
-    if (!highLightsLoaded) {
-      import('../lib/highlight-languages')
-        .then(res => res.default.map(config => hljs.registerLanguage(config[0], config[1])))
-        .then(() => {
-          highLightsLoaded = true
-        })
+    if (highLightsLoaded) {
+      if (onLoadedRef.current) onLoadedRef.current()
+      return
     }
+
+    import('../lib/highlight-languages')
+      .then(res => res.default.map(config => hljs.registerLanguage(config[0], config[1])))
+      .then(() => {
+        highLightsLoaded = true
+        if (onLoadedRef.current) onLoadedRef.current()
+      })
+      .catch(() => {})
   }, [])
 }
 
@@ -503,7 +541,7 @@ function useShowInvisiblesLoader() {
 // exported image drift apart from the rendered code. Refresh when the font
 // loader reports that loading finished and also a few times shortly after
 // mount, to cover fonts that were already cached.
-function useFontLoadRefresh(props, editorRef) {
+function useFontLoadRefresh(props, carbonRef) {
   const fontFamily = props.config && props.config.fontFamily
   const fontSize = props.config && props.config.fontSize
 
@@ -511,36 +549,52 @@ function useFontLoadRefresh(props, editorRef) {
     if (typeof document === 'undefined' || !document.fonts) return undefined
 
     let cancelled = false
-    const refresh = () => {
+    const sync = () => {
       if (cancelled) return
-      const editor = editorRef.current && editorRef.current.editor
-      if (editor) editor.refresh()
+      const carbon = carbonRef.current
+      if (carbon && carbon.syncEditor) carbon.syncEditor()
     }
 
     const fontSet = document.fonts
     const canListen = typeof fontSet.addEventListener === 'function'
-    if (canListen) fontSet.addEventListener('loadingdone', refresh)
+    if (canListen) fontSet.addEventListener('loadingdone', sync)
 
-    // 字体可能已经加载完成（事件已错过），稍后几秒内再栈底刷新几次
-    const timers = [300, 1000, 3000].map(ms => setTimeout(refresh, ms))
+    // 字体可能已经加载完成（事件已错过），稍后几秒内再栈底同步几次
+    const timers = [300, 1000, 3000].map(ms => setTimeout(sync, ms))
 
     return () => {
       cancelled = true
-      if (canListen) fontSet.removeEventListener('loadingdone', refresh)
+      if (canListen) fontSet.removeEventListener('loadingdone', sync)
       timers.forEach(clearTimeout)
     }
-  }, [fontFamily, fontSize, editorRef])
+  }, [fontFamily, fontSize, carbonRef])
 }
 
 function CarbonContainer(props, ref) {
-  useModeLoader()
-  useHighlightLoader()
-  useShowInvisiblesLoader()
+  const carbonRef = React.useRef(null)
   const editorRef = React.createRef()
-  const onGutterClick = useSelectedLines(props, editorRef)
-  useFontLoadRefresh(props, editorRef)
 
-  return <Carbon {...props} innerRef={ref} editorRef={editorRef} onGutterClick={onGutterClick} />
+  const handleDepsLoaded = React.useCallback(() => {
+    const carbon = carbonRef.current
+    if (carbon && carbon.syncEditor) carbon.syncEditor()
+  }, [])
+
+  useModeLoader(handleDepsLoaded)
+  useHighlightLoader(handleDepsLoaded)
+  useShowInvisiblesLoader()
+  useFontLoadRefresh(props, carbonRef)
+
+  const onGutterClick = useSelectedLines(props, editorRef)
+
+  return (
+    <Carbon
+      ref={carbonRef}
+      {...props}
+      innerRef={ref}
+      editorRef={editorRef}
+      onGutterClick={onGutterClick}
+    />
+  )
 }
 
 export default React.forwardRef(CarbonContainer)
