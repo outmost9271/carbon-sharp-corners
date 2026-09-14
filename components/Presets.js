@@ -125,13 +125,14 @@ const Presets = React.memo(
             <span>{t('settings.presets.applied')}</span>
             <Button
               center
-              flex="0"
+              flex="0 0 auto"
               onClick={undo}
               color={COLORS.BLACK}
               hoverBackground="transparent"
               background="transparent"
+              style={{ whiteSpace: 'nowrap' }}
             >
-              {t('settings.presets.undo')} <span>&#x21A9;</span>
+              {t('settings.presets.undo')} <span className="undo-icon">&#x21A9;</span>
             </Button>
           </div>
         )}
@@ -176,9 +177,15 @@ const Presets = React.memo(
               padding: 4px 8px;
             }
 
-            .settings-presets-applied span {
+            .settings-presets-applied > span {
               float: right;
               margin: 2px 0 0 2px;
+              white-space: nowrap;
+            }
+
+            .settings-presets-applied .undo-icon {
+              float: none;
+              margin: 0;
             }
           `}
         </style>
