@@ -11,7 +11,7 @@ import Popout, { managePopout } from './Popout'
 import Button from './Button'
 import Presets from './Presets'
 import MenuButton from './MenuButton'
-import { COLORS, DEFAULT_PRESETS, DEFAULT_SETTINGS, DEFAULT_WIDTHS, DEFAULT_HEIGHTS } from '../lib/constants'
+import { COLORS, DEFAULT_PRESETS, DEFAULT_SETTINGS, DEFAULT_WIDTHS } from '../lib/constants'
 import { toggle, getPresets, savePresets, generateId, fileToJSON } from '../lib/util'
 import { t } from '../lib/i18n'
 import SettingsIcon from './svg/Settings'
@@ -33,8 +33,6 @@ function WindowSettings({
   windowControls,
   widthAdjustment,
   width,
-  heightAdjustment,
-  height,
   watermark,
   onWidthChanging,
   onWidthChanged,
@@ -92,32 +90,22 @@ function WindowSettings({
       />
       {!widthAdjustment && (
         <div className="row settings-row width-row">
-          <Input
+          <Slider
             label={t('settings.window.width')}
+            value={String(width)}
+            minValue={DEFAULT_WIDTHS.minWidth}
+            maxValue={DEFAULT_WIDTHS.maxWidth}
+            onChange={value => onChange('width', String(parseInt(value, 10)))}
+            onMouseDown={onWidthChanging}
+            onMouseUp={onWidthChanged}
+          />
+          <Input
             type="number"
             value={width}
             min={DEFAULT_WIDTHS.minWidth}
             max={DEFAULT_WIDTHS.maxWidth}
             onChange={e => onChange('width', e.target.value)}
-            width="50%"
-          />
-        </div>
-      )}
-      <Toggle
-        label={t('settings.window.autoAdjustHeight')}
-        enabled={heightAdjustment}
-        onChange={onChange.bind(null, 'heightAdjustment')}
-      />
-      {!heightAdjustment && (
-        <div className="row settings-row height-row">
-          <Input
-            label={t('settings.window.height')}
-            type="number"
-            value={height}
-            min={DEFAULT_HEIGHTS.minHeight}
-            max={DEFAULT_HEIGHTS.maxHeight}
-            onChange={e => onChange('height', e.target.value)}
-            width="50%"
+            width="56px"
           />
         </div>
       )}
@@ -128,10 +116,14 @@ function WindowSettings({
       />
       <style jsx>
         {`
-          .width-row,
-          .height-row {
-            justify-content: space-between;
-            padding: 8px 12px 8px 8px;
+          .width-row {
+            align-items: center;
+            padding: 0 8px 0 0;
+          }
+
+          .width-row :global(.slider) {
+            flex: 1;
+            border-right: 1px solid ${COLORS.SECONDARY};
           }
 
           .row > :global(div:first-child) {
@@ -416,8 +408,6 @@ class Settings extends React.PureComponent {
             windowControls={this.props.windowControls}
             widthAdjustment={this.props.widthAdjustment}
             width={this.props.width}
-            heightAdjustment={this.props.heightAdjustment}
-            height={this.props.height}
             watermark={this.props.watermark}
           />
         )

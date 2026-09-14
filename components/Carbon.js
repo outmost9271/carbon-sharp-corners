@@ -24,7 +24,6 @@ import {
   LANGUAGE_MIME_HASH,
   DEFAULT_SETTINGS,
   DEFAULT_WIDTHS,
-  DEFAULT_HEIGHTS,
   THEMES_HASH,
 } from '../lib/constants'
 
@@ -49,8 +48,6 @@ const clampValue = (value, min, max) => {
   return Math.min(Math.max(parsed, min), max)
 }
 const clampWidth = width => clampValue(width, DEFAULT_WIDTHS.minWidth, DEFAULT_WIDTHS.maxWidth)
-const clampHeight = height =>
-  clampValue(height, DEFAULT_HEIGHTS.minHeight, DEFAULT_HEIGHTS.maxHeight)
 function getUnderline(underline) {
   switch (underline) {
     case 1:
@@ -281,9 +278,6 @@ class Carbon extends React.PureComponent {
               min-width: ${config.widthAdjustment ? '90px' : 'auto'};
               max-width: ${config.widthAdjustment ? '1365px' : 'none'};
               ${config.widthAdjustment ? '' : `width: ${clampWidth(config.width)}px;`}
-              ${config.heightAdjustment
-                ? ''
-                : `height: ${clampHeight(config.height)}px; overflow: hidden;`}
               padding: ${config.paddingVertical} ${config.paddingHorizontal};
             }
 

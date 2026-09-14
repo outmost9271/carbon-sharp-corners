@@ -31,7 +31,7 @@ class Slider extends React.Component {
         <label>{this.props.label}</label>
         <input
           type="range"
-          defaultValue={this.props.value}
+          value={parseFloat(this.props.value) || 0}
           onChange={this.handleChange}
           onMouseDown={this.props.onMouseDown}
           onMouseUp={this.props.onMouseUp}
