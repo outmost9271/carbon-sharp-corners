@@ -310,7 +310,7 @@ class Carbon extends React.PureComponent {
               min-width: inherit;
               position: relative;
               z-index: 1;
-              border-radius: 5px;
+              border-radius: ${config.sharpCorners ? '0' : '5px'};
               ${config.dropShadow
                 ? `box-shadow: 0 ${config.dropShadowOffsetY} ${config.dropShadowBlurRadius} rgba(0, 0, 0, 0.55)`
                 : ''};
@@ -321,7 +321,9 @@ class Carbon extends React.PureComponent {
               min-width: inherit;
               padding: 18px 18px;
               padding-left: 12px;
-              ${config.lineNumbers ? 'padding-left: 12px;' : ''} border-radius: 5px;
+              ${config.lineNumbers ? 'padding-left: 12px;' : ''} border-radius: ${config.sharpCorners
+                ? '0'
+                : '5px'};
               font-family: ${config.fontFamily}, monospace !important;
               font-size: ${config.fontSize};
               line-height: ${config.lineHeight};

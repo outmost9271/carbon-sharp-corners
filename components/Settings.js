@@ -23,6 +23,7 @@ function KeyboardShortcut({ trigger, handle }) {
 function WindowSettings({
   onChange,
   windowTheme,
+  sharpCorners,
   paddingHorizontal,
   paddingVertical,
   dropShadow,
@@ -61,6 +62,11 @@ function WindowSettings({
         label="Drop shadow"
         enabled={dropShadow}
         onChange={onChange.bind(null, 'dropShadow')}
+      />
+      <Toggle
+        label="Sharp corners"
+        enabled={sharpCorners}
+        onChange={onChange.bind(null, 'sharpCorners')}
       />
       {dropShadow && (
         <div className="row drop-shadow-options">
@@ -375,6 +381,7 @@ class Settings extends React.PureComponent {
             onWidthChanging={this.handleWidthChanging}
             onWidthChanged={this.handleWidthChanged}
             windowTheme={this.props.windowTheme}
+            sharpCorners={this.props.sharpCorners}
             paddingHorizontal={this.props.paddingHorizontal}
             paddingVertical={this.props.paddingVertical}
             dropShadow={this.props.dropShadow}
