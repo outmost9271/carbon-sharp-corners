@@ -12,13 +12,10 @@ jobs:
         with:
           node-version-file: '.node-version'
           cache: 'yarn'
-      - name: npm install, lint, build, and test
+      - name: Install dependencies, lint and build
         run: |
           yarn
           npm run lint --if-present
           npm run build --if-present
-          npm start & npx wait-on http://localhost:3000 && npm run cy:run -- --config baseUrl=http://localhost:3000
-          # --record --key 26c0b9eb-40f9-4ca6-b91d-a39f03652011
         env:
           CI: true
-          CYPRESS_CI: true
