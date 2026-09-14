@@ -364,6 +364,13 @@ class Carbon extends React.PureComponent {
               border: 2px solid ${COLORS.SECONDARY};
             }
 
+            /* CodeMirror 默认的失焦选区是纯浅灰 (#d9d9d9)，在深色主题下与浅色
+               代码文字撞色，失焦后选中内容会看起来一片空白（Seti 等主题只定义
+               了聚焦时的选区）。统一改成半透明选区色，聚焦样式仍由主题决定。 */
+            .container :global(.CodeMirror:not(.CodeMirror-focused) div.CodeMirror-selected) {
+              background: rgba(128, 128, 128, 0.42);
+            }
+
             .container :global(.window-controls + .CodeMirror__container > .CodeMirror) {
               padding-top: 48px;
             }

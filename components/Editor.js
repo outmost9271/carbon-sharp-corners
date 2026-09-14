@@ -466,6 +466,10 @@ class Editor extends React.Component {
             #style-editor-button {
               display: flex;
               align-items: center;
+              justify-content: center;
+              /* 为文本选择编辑条（B/I/U/颜色，宽 124px）预留位置：
+                 它是选中文本后才出现的，若不为它留位，整个编辑器会被撑宽 */
+              min-width: 124px;
             }
             @media (max-width: 768px) {
               .toolbar-second-row {
