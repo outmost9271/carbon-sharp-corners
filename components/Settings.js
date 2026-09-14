@@ -11,7 +11,7 @@ import Popout, { managePopout } from './Popout'
 import Button from './Button'
 import Presets from './Presets'
 import MenuButton from './MenuButton'
-import { COLORS, DEFAULT_PRESETS, DEFAULT_SETTINGS, DEFAULT_WIDTHS } from '../lib/constants'
+import { COLORS, DEFAULT_PRESETS, DEFAULT_SETTINGS, DEFAULT_WIDTHS, DEFAULT_HEIGHTS } from '../lib/constants'
 import { toggle, getPresets, savePresets, generateId, fileToJSON } from '../lib/util'
 import { t } from '../lib/i18n'
 import SettingsIcon from './svg/Settings'
@@ -33,6 +33,8 @@ function WindowSettings({
   windowControls,
   widthAdjustment,
   width,
+  heightAdjustment,
+  height,
   watermark,
   onWidthChanging,
   onWidthChanged,
@@ -102,13 +104,32 @@ function WindowSettings({
         </div>
       )}
       <Toggle
+        label={t('settings.window.autoAdjustHeight')}
+        enabled={heightAdjustment}
+        onChange={onChange.bind(null, 'heightAdjustment')}
+      />
+      {!heightAdjustment && (
+        <div className="row settings-row height-row">
+          <Input
+            label={t('settings.window.height')}
+            type="number"
+            value={height}
+            min={DEFAULT_HEIGHTS.minHeight}
+            max={DEFAULT_HEIGHTS.maxHeight}
+            onChange={e => onChange('height', e.target.value)}
+            width="50%"
+          />
+        </div>
+      )}
+      <Toggle
         label={t('settings.window.watermark')}
         enabled={watermark}
         onChange={onChange.bind(null, 'watermark')}
       />
       <style jsx>
         {`
-          .width-row {
+          .width-row,
+          .height-row {
             justify-content: space-between;
             padding: 8px 12px 8px 8px;
           }
@@ -395,6 +416,8 @@ class Settings extends React.PureComponent {
             windowControls={this.props.windowControls}
             widthAdjustment={this.props.widthAdjustment}
             width={this.props.width}
+            heightAdjustment={this.props.heightAdjustment}
+            height={this.props.height}
             watermark={this.props.watermark}
           />
         )

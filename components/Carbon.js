@@ -23,6 +23,8 @@ import {
   LANGUAGE_NAME_HASH,
   LANGUAGE_MIME_HASH,
   DEFAULT_SETTINGS,
+  DEFAULT_WIDTHS,
+  DEFAULT_HEIGHTS,
   THEMES_HASH,
 } from '../lib/constants'
 
@@ -38,6 +40,17 @@ function searchLanguage(l) {
 }
 
 function noop() {}
+
+// 手动尺寸（宽度/高度）在渲染时统一限制到允许范围，无论它们来自
+// 设置面板、URL 参数还是导入的配置
+const clampValue = (value, min, max) => {
+  const parsed = parseInt(value, 10)
+  if (Number.isNaN(parsed)) return min
+  return Math.min(Math.max(parsed, min), max)
+}
+const clampWidth = width => clampValue(width, DEFAULT_WIDTHS.minWidth, DEFAULT_WIDTHS.maxWidth)
+const clampHeight = height =>
+  clampValue(height, DEFAULT_HEIGHTS.minHeight, DEFAULT_HEIGHTS.maxHeight)
 function getUnderline(underline) {
   switch (underline) {
     case 1:
@@ -266,8 +279,11 @@ class Carbon extends React.PureComponent {
             .container {
               position: relative;
               min-width: ${config.widthAdjustment ? '90px' : 'auto'};
-              max-width: ${config.widthAdjustment ? '1024px' : 'none'};
-              ${config.widthAdjustment ? '' : `width: ${config.width}px;`}
+              max-width: ${config.widthAdjustment ? '1365px' : 'none'};
+              ${config.widthAdjustment ? '' : `width: ${clampWidth(config.width)}px;`}
+              ${config.heightAdjustment
+                ? ''
+                : `height: ${clampHeight(config.height)}px; overflow: hidden;`}
               padding: ${config.paddingVertical} ${config.paddingHorizontal};
             }
 
