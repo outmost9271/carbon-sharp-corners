@@ -4,7 +4,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 export default class Doc extends Document {
   render() {
     return (
-      <Html lang="en">
+      <Html lang="zh-CN">
         <Head />
         <body>
           <Main />

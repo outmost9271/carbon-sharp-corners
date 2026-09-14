@@ -6,6 +6,7 @@ import { COLORS } from '../lib/constants'
 import Button from './Button'
 import Popout, { managePopout } from './Popout'
 import { Down as ArrowDown } from './svg/Arrows'
+import { t } from '../lib/i18n'
 
 const popoutStyle = { width: '144px', right: 8 }
 
@@ -37,7 +38,7 @@ function ShareMenu({ isVisible, toggleVisibility, tweet, imgur }) {
           color={COLORS.BLUE}
           style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
         >
-          {tweeting ? 'Loading…' : 'Tweet'}
+          {tweeting ? t('share.loading') : t('share.tweet')}
         </Button>
         <Button
           id="share-menu"
@@ -54,7 +55,7 @@ function ShareMenu({ isVisible, toggleVisibility, tweet, imgur }) {
             borderTopLeftRadius: 0,
             maxWidth: '26px',
           }}
-          title="Share menu dropdown"
+          title={t('share.menu')}
         >
           <ArrowDown color={COLORS.BLUE} />
         </Button>
@@ -62,7 +63,7 @@ function ShareMenu({ isVisible, toggleVisibility, tweet, imgur }) {
       <Popout hidden={!isVisible} borderColor={COLORS.BLUE} pointerRight="6px" style={popoutStyle}>
         <div className="share-row flex">
           <Button padding="8px" color={COLORS.BLUE} onClick={onClickImgur}>
-            {imguring ? 'Uploading...' : 'Upload to Imgur (beta)'}
+            {imguring ? t('share.uploading') : t('share.uploadImgur')}
           </Button>
         </div>
       </Popout>

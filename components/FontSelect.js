@@ -3,6 +3,7 @@ import ListSetting from './ListSetting'
 import ReferralLink from './ReferralLink'
 import { FONTS } from '../lib/constants'
 import { fileToDataURL as blobToUrl } from '../lib/util'
+import { t } from '../lib/i18n'
 
 const EXTENSIONS = ['.otf', '.ttf', '.woff']
 
@@ -14,7 +15,7 @@ const Font = ({ id, name, link }) => (
     {link && (
       <ReferralLink href={link}>
         <span style={id === 'upload' ? { textAlign: 'center', width: '100%' } : { fontFamily: id }}>
-          Purchase
+          {t('settings.editor.purchase')}
         </span>
       </ReferralLink>
     )}
@@ -44,8 +45,8 @@ function FontSelect(props) {
   return (
     <div>
       <ListSetting
-        title="Font"
-        items={[{ id: 'upload', name: 'Upload +' }, ...FONTS]}
+        title={t('settings.editor.font')}
+        items={[{ id: 'upload', name: t('settings.editor.uploadFont') }, ...FONTS]}
         {...props}
         onChange={onChange}
       >

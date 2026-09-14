@@ -13,6 +13,7 @@ import Presets from './Presets'
 import MenuButton from './MenuButton'
 import { COLORS, DEFAULT_PRESETS, DEFAULT_SETTINGS, DEFAULT_WIDTHS } from '../lib/constants'
 import { toggle, getPresets, savePresets, generateId, fileToJSON } from '../lib/util'
+import { t } from '../lib/i18n'
 import SettingsIcon from './svg/Settings'
 
 function KeyboardShortcut({ trigger, handle }) {
@@ -45,13 +46,13 @@ function WindowSettings({
       />
       <div className="row">
         <Slider
-          label="Padding (vert)"
+          label={t('settings.window.paddingVertical')}
           value={paddingVertical}
           maxValue={200}
           onChange={onChange.bind(null, 'paddingVertical')}
         />
         <Slider
-          label="Padding (horiz)"
+          label={t('settings.window.paddingHorizontal')}
           value={paddingHorizontal}
           onChange={onChange.bind(null, 'paddingHorizontal')}
           onMouseDown={onWidthChanging}
@@ -59,38 +60,38 @@ function WindowSettings({
         />
       </div>
       <Toggle
-        label="Drop shadow"
+        label={t('settings.window.dropShadow')}
         enabled={dropShadow}
         onChange={onChange.bind(null, 'dropShadow')}
       />
       <Toggle
-        label="Sharp corners"
+        label={t('settings.window.sharpCorners')}
         enabled={sharpCorners}
         onChange={onChange.bind(null, 'sharpCorners')}
       />
       {dropShadow && (
         <div className="row drop-shadow-options">
           <Slider
-            label="(offset-y)"
+            label={t('settings.window.dropShadowOffsetY')}
             value={dropShadowOffsetY}
             onChange={onChange.bind(null, 'dropShadowOffsetY')}
           />
           <Slider
-            label="(blur-radius)"
+            label={t('settings.window.dropShadowBlurRadius')}
             value={dropShadowBlurRadius}
             onChange={onChange.bind(null, 'dropShadowBlurRadius')}
           />
         </div>
       )}
       <Toggle
-        label="Auto-adjust width"
+        label={t('settings.window.autoAdjustWidth')}
         enabled={widthAdjustment}
         onChange={onChange.bind(null, 'widthAdjustment')}
       />
       {!widthAdjustment && (
         <div className="row settings-row width-row">
           <Input
-            label="Width"
+            label={t('settings.window.width')}
             type="number"
             value={width}
             min={DEFAULT_WIDTHS.minWidth}
@@ -100,7 +101,11 @@ function WindowSettings({
           />
         </div>
       )}
-      <Toggle label="Watermark" enabled={watermark} onChange={onChange.bind(null, 'watermark')} />
+      <Toggle
+        label={t('settings.window.watermark')}
+        enabled={watermark}
+        onChange={onChange.bind(null, 'watermark')}
+      />
       <style jsx>
         {`
           .width-row {
@@ -146,7 +151,7 @@ function EditorSettings({
         onChange={onChange.bind(null, 'fontFamily')}
       />
       <Slider
-        label="Size"
+        label={t('settings.editor.size')}
         value={size}
         minValue={10}
         maxValue={18}
@@ -156,7 +161,7 @@ function EditorSettings({
         onMouseUp={onWidthChanged}
       />
       <Slider
-        label="Line height"
+        label={t('settings.editor.lineHeight')}
         value={lineHeight}
         minValue={90}
         maxValue={250}
@@ -164,14 +169,14 @@ function EditorSettings({
         onChange={onChange.bind(null, 'lineHeight')}
       />
       <Toggle
-        label="Line numbers"
+        label={t('settings.editor.lineNumbers')}
         enabled={lineNumbers}
         onChange={onChange.bind(null, 'lineNumbers')}
       />
       {lineNumbers && (
         <div className="row settings-row first-line-number-row">
           <Input
-            label="First line number"
+            label={t('settings.editor.firstLineNumber')}
             type="number"
             value={firstLineNumber}
             min={0}
@@ -181,7 +186,7 @@ function EditorSettings({
         </div>
       )}
       <Toggle
-        label="Hidden characters"
+        label={t('settings.editor.hiddenCharacters')}
         enabled={hiddenCharacters}
         onChange={onChange.bind(null, 'hiddenCharacters')}
       />
@@ -226,17 +231,17 @@ function MiscSettings({ format, reset, applyPreset, settings }) {
           style={{ borderRight: `1px solid ${COLORS.SECONDARY}` }}
           onClick={() => input.current.click()}
         >
-          Import config
+          {t('settings.misc.importConfig')}
         </Button>
         <Button center Component="a" href={download} download="carbon-config.json">
-          Export config
+          {t('settings.misc.exportConfig')}
         </Button>
       </div>
       <Button center onClick={format} style={resetButtonStyle}>
-        Prettify code
+        {t('settings.misc.prettify')}
       </Button>
       <Button center color={COLORS.RED} onClick={reset} style={resetButtonStyle}>
-        Reset settings
+        {t('settings.misc.reset')}
       </Button>
       <style jsx>
         {`
@@ -433,7 +438,7 @@ class Settings extends React.PureComponent {
         <KeyboardShortcut trigger="⌘-/" handle={this.handleOpenAndFocus} />
         <KeyboardShortcut trigger="⇧-⌘-\" handle={this.handleReset} />
         <Button
-          title="Settings Menu"
+          title={t('settings.menu')}
           border
           center
           selected={isVisible}
@@ -465,9 +470,24 @@ class Settings extends React.PureComponent {
           />
           <div className="settings-bottom">
             <div className="settings-menu" ref={this.menuRef} tabIndex={-1}>
-              <MenuButton name="Window" select={this.selectMenu} selected={selectedMenu} />
-              <MenuButton name="Editor" select={this.selectMenu} selected={selectedMenu} />
-              <MenuButton name="Misc" select={this.selectMenu} selected={selectedMenu} />
+              <MenuButton
+                name="Window"
+                label={t('settings.tab.window')}
+                select={this.selectMenu}
+                selected={selectedMenu}
+              />
+              <MenuButton
+                name="Editor"
+                label={t('settings.tab.editor')}
+                select={this.selectMenu}
+                selected={selectedMenu}
+              />
+              <MenuButton
+                name="Misc"
+                label={t('settings.tab.misc')}
+                select={this.selectMenu}
+                selected={selectedMenu}
+              />
             </div>
             {this.renderContent()}
           </div>

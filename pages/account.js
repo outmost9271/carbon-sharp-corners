@@ -10,6 +10,7 @@ import { useAuth } from '../components/AuthContext'
 
 import { loginGitHub, logout } from '../lib/client'
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 const Billing = dynamic(() => import('../components/Billing'), {
   loading: () => <div style={{ minHeight: '360px' }} />,
@@ -19,7 +20,7 @@ function logoutThunk() {
   return logout
 }
 
-const soon = <span title="Coming Soon">ⓘ</span>
+const soon = <span title={t('account.comingSoon')}>ⓘ</span>
 
 function Plan({ selectBilling }) {
   const user = useAuth()
@@ -45,63 +46,63 @@ function Plan({ selectBilling }) {
           <tr>
             <td />
             <td>
-              <h3>Free</h3>
+              <h3>{t('account.free')}</h3>
             </td>
             <td>
-              <h3 style={{ color: COLORS.BLUE }}>Diamond</h3>
+              <h3 style={{ color: COLORS.BLUE }}>{t('account.diamond')}</h3>
             </td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>PNG/SVG Exports</td>
+            <td>{t('account.feature.pngSvg')}</td>
             <td>✔</td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>Full visual editor</td>
+            <td>{t('account.feature.editor')}</td>
             <td>✔</td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>Custom backgrounds</td>
+            <td>{t('account.feature.backgrounds')}</td>
             <td>✔</td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>GitHub Gist support</td>
+            <td>{t('account.feature.gist')}</td>
             <td>✔</td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>Saved snippets</td>
+            <td>{t('account.feature.snippets')}</td>
             <td>1000</td>
             <td>∞</td>
           </tr>
           <tr>
-            <td>Embed saved snippets</td>
+            <td>{t('account.feature.embed')}</td>
             <td>✔</td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>API Access {soon}</td>
+            <td>{t('account.feature.api')} {soon}</td>
             <td></td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>Saved custom themes/presets {soon}</td>
+            <td>{t('account.feature.themes')} {soon}</td>
             <td></td>
             <td>✔</td>
           </tr>
           <tr>
-            <td>Twitter card unfurls {soon}</td>
+            <td>{t('account.feature.twitterCard')} {soon}</td>
             <td></td>
             <td>✔</td>
           </tr>
           <tr>
             <td></td>
-            <td>FREE FOREVER</td>
-            <td>$5.00 / month</td>
+            <td>{t('account.freeForever')}</td>
+            <td>{t('account.perMonth')}</td>
           </tr>
           <tr>
             <td></td>
@@ -116,7 +117,7 @@ function Plan({ selectBilling }) {
                 disabled={user && user.plan === 'free'}
                 onClick={handleSelectFree}
               >
-                {user ? 'Current' : 'Get Started'}
+                {user ? t('account.current') : t('account.getStarted')}
               </Button>
             </td>
             <td>
@@ -130,7 +131,7 @@ function Plan({ selectBilling }) {
                 disabled={user && user.plan === 'diamond'}
                 onClick={handleSelectUpgrade}
               >
-                Upgrade
+                {t('account.upgrade')}
               </Button>
             </td>
           </tr>
@@ -185,11 +186,29 @@ function Settings() {
     <div className="editor">
       <div className="settings-bottom">
         <div className="settings-menu">
-          <MenuButton name="Plan" select={selectMenu} selected={selected}></MenuButton>
-          <MenuButton name="Billing" select={selectMenu} selected={selected}></MenuButton>
+          <MenuButton
+            name="Plan"
+            label={t('account.plan')}
+            select={selectMenu}
+            selected={selected}
+          ></MenuButton>
+          <MenuButton
+            name="Billing"
+            label={t('account.billing')}
+            select={selectMenu}
+            selected={selected}
+          ></MenuButton>
 
           {/* <MenuButton name="API Keys" select={selectMenu} selected={selected} /> */}
-          {user && <MenuButton name="Sign Out" select={logoutThunk} selected={selected} noArrows />}
+          {user && (
+            <MenuButton
+              name="Sign Out"
+              label={t('account.signOut')}
+              select={logoutThunk}
+              selected={selected}
+              noArrows
+            />
+          )}
         </div>
         <div className="content">
           {selected === 'Plan' && <Plan selectBilling={selectMenu('Billing')} />}

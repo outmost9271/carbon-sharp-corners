@@ -7,6 +7,7 @@ import Popout from '../Popout'
 import ColorPicker from '../ColorPicker'
 import { HIGHLIGHT_KEYS, COLORS } from '../../lib/constants'
 import { stringifyColor, generateId } from '../../lib/util'
+import { t } from '../../lib/i18n'
 
 const colorPickerStyle = {
   backgroundColor: COLORS.BLACK,
@@ -19,7 +20,7 @@ const colorPresets = []
 const HighlightPicker = ({ title, onChange, color }) => (
   <div className="color-picker-container">
     <div className="color-picker-header">
-      <span className="capitalize">{title}</span>
+      <span className="capitalize">{t(`highlight.${title}`)}</span>
     </div>
     <ColorPicker
       key={title}
@@ -64,11 +65,11 @@ const ThemeCreate = ({
     <Popout pointerLeft="15px" style={{ display: 'flex' }}>
       <div className="theme-settings">
         <div className="field name-field">
-          <span>Name</span>
+          <span>{t('theme.name')}</span>
           <Input
-            title="name"
+            title={t('theme.name')}
             name="name"
-            placeholder="Custom Theme"
+            placeholder={t('theme.customPlaceholder')}
             value={name}
             onChange={onInputChange}
             maxLength="32"
@@ -76,7 +77,7 @@ const ThemeCreate = ({
         </div>
         <div className="theme-select">
           <ListSetting
-            title="Preset"
+            title={t('theme.preset')}
             items={themes}
             selected={preset}
             onOpen={() => selectHighlight(null)}
@@ -97,7 +98,7 @@ const ThemeCreate = ({
                 background={highlight === key ? COLORS.HOVER : COLORS.BLACK}
               >
                 <div className="row">
-                  <span className="capitalize">{key}</span>
+                  <span className="capitalize">{t(`highlight.${key}`)}</span>
                   <span
                     className="color-square"
                     style={{
@@ -129,7 +130,7 @@ const ThemeCreate = ({
             })
           }
         >
-          Create +
+          {t('theme.create')}
         </Button>
       </div>
       {highlight && (

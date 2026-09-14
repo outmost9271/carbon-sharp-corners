@@ -5,6 +5,7 @@ import firebase, { logout, loginGitHub } from '../lib/client'
 import Button from './Button'
 import Popout, { managePopout } from './Popout'
 import { useAuth } from './AuthContext'
+import { t } from '../lib/i18n'
 
 function Drawer(props) {
   return (
@@ -12,22 +13,23 @@ function Drawer(props) {
       <div className="flex column">
         <Link href="/snippets">
           <Button large center padding="0.5rem 0" style={{ borderBottom: '1px solid' }}>
-            <img src="/static/svg/snippets.svg" alt="Snippets page" width="16px" /> Snippets{' '}
+            <img src="/static/svg/snippets.svg" alt={t('login.snippetsAlt')} width="16px" />{' '}
+            {t('login.snippets')}{' '}
           </Button>
         </Link>
         <Link href="/account">
           <Button large center padding="0.5rem 0" style={{ borderBottom: '1px solid' }}>
             <img
               src="/static/svg/person.svg"
-              alt="Account"
+              alt={t('login.account')}
               width="16px"
               style={{ left: '-2px', marginRight: 'calc(1rem - 3px)' }}
             />{' '}
-            Account
+            {t('login.account')}
           </Button>
         </Link>
         <Button large center padding="0.5rem 0" onClick={logout}>
-          Sign Out
+          {t('account.signOut')}
         </Button>
       </div>
       <style jsx>
@@ -74,7 +76,7 @@ function LoginButton({ isVisible, toggleVisibility }) {
           src={user ? user.photoURL : '/static/svg/github.svg'}
           alt={user ? user.displayName : 'GitHub'}
         />
-        <span>{user ? user.displayName : 'Sign in/up'}</span>
+        <span>{user ? user.displayName : t('login.signIn')}</span>
       </Button>
       <Drawer isVisible={user && isVisible} />
       <style jsx>

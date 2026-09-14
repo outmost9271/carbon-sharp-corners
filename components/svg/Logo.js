@@ -1,10 +1,12 @@
 import React from 'react'
 
+import { t } from '../../lib/i18n'
+
 export default function Logo() {
   return (
     <svg
       role="img"
-      aria-label="Carbon Logo"
+      aria-label={t('header.logo')}
       xmlns="http://www.w3.org/2000/svg"
       width="268"
       height="66.4"

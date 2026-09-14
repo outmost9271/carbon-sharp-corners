@@ -7,6 +7,7 @@ import { useAuth } from './AuthContext'
 import LoginButton from './LoginButton'
 
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 const X = (
   <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17">
@@ -54,17 +55,11 @@ export default function Billing() {
     <div className="checkout">
       {success ? (
         <div className="column">
-          <h4>Thank you for supporting Carbon!</h4>
+          <h4>{t('account.thanksTitle')}</h4>
+          <p className="success">{t('account.thanksBody')}</p>
           <p className="success">
-            However, Carbon Diamond is not quite ready yet.
-            <br />
-            {/* Your card has <u>not</u> been charged or saved today. */}
-            <br />
-            We greatly appreciate your support, and will let you know when premium features launch!
-          </p>
-          <p className="success">
-            — the Carbon Team{' '}
-            <span role="img" aria-label="Black and yellow hearts">
+            {t('account.thanksSign')}{' '}
+            <span role="img" aria-label={t('account.heartsAlt')}>
               💛🖤
             </span>
           </p>
@@ -72,20 +67,21 @@ export default function Billing() {
       ) : (
         <div className="column">
           <h4>
-            Upgrade to <span>Diamond</span>
+            {t('account.upgradeTo')} <span>{t('account.diamond')}</span>
             <br />
-            <span className="tag">($5.00 / month)</span>
+            <span className="tag">({t('account.perMonth')})</span>
           </h4>
-          <p>Please enter a credit or debit card:</p>
+          <p>{t('account.cardPrompt')}</p>
           <form onSubmit={submit}>
             <fieldset>
               {/** Insert Stripe element here */}
               <hr />
-              <Input placeholder="Cardholders's name…" name="name" required />
+              <Input placeholder={t('account.cardholdersName')} name="name" required />
             </fieldset>
             <small>
-              (By clicking subscribe, you are accepting the{' '}
-              <a href="/terms">terms and conditions</a>)
+              {t('account.termsPrefix')}{' '}
+              <a href="/terms">{t('account.termsLink')}</a>
+              {t('account.termsSuffix')}
             </small>
             <br />
             <Button
@@ -97,7 +93,7 @@ export default function Billing() {
               type="submit"
               color="rgba(255, 255, 255, 0.7)"
             >
-              {loading ? 'Sending…' : 'Subscribe'}
+              {loading ? t('account.sending') : t('account.subscribe')}
             </Button>
             <div className={`error ${error ? 'visible' : ''}`} role="alert">
               {X}

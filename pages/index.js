@@ -7,6 +7,7 @@ import Either from 'eitherx'
 import EditorContainer from '../components/EditorContainer'
 import Page from '../components/Page'
 import { MetaLinks } from '../components/Meta'
+import { t } from '../lib/i18n'
 
 class Index extends React.Component {
   componentDidMount() {
@@ -31,11 +32,10 @@ class Index extends React.Component {
         <Either>
           <EditorContainer router={this.props.router} snippet={this.props.snippet} />
           <p>
-            An unexpected error has occurred. Please{' '}
+            {t('error.unexpected')}{' '}
             <u>
-              <a href="https://github.com/carbon-app/carbon">file an issue here</a>
+              <a href="https://github.com/carbon-app/carbon">{t('error.fileIssue')}</a>
             </u>
-            .
           </p>
         </Either>
       </Page>

@@ -11,11 +11,12 @@ import Carbon from '../../components/Carbon'
 import GlobalHighlights from '../../components/Themes/GlobalHighlights'
 import { DEFAULT_CODE, DEFAULT_SETTINGS, THEMES_HASH } from '../../lib/constants'
 import { getRouteState } from '../../lib/routing'
+import { t } from '../../lib/i18n'
 
 const Page = props => (
   <React.Fragment>
     <Head>
-      <title>Carbon Embeds</title>
+      <title>{t('embed.title')}</title>
     </Head>
     <MetaTags />
     <StylesheetLink theme={props.theme} />

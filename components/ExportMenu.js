@@ -2,6 +2,7 @@ import React from 'react'
 import { useKeyboardListener, useAsyncCallback } from 'actionsack'
 
 import { COLORS, EXPORT_SIZES } from '../lib/constants'
+import { t } from '../lib/i18n'
 import Button from './Button'
 import Input from './Input'
 import Popout, { managePopout } from './Popout'
@@ -41,9 +42,9 @@ function ExportMenu({ onChange, exportSize, isVisible, toggleVisibility, exportI
           onClick={handleExport('blob')}
           data-cy="quick-export-button"
           style={{ minWidth: 92, borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
-          title="Quick export"
+          title={t('export.quick')}
         >
-          {loading ? 'Exporting…' : 'Export'}
+          {loading ? t('export.exporting') : t('export.export')}
         </Button>
         <Button
           id="export-menu"
@@ -60,7 +61,7 @@ function ExportMenu({ onChange, exportSize, isVisible, toggleVisibility, exportI
             borderTopLeftRadius: 0,
             maxWidth: '26px',
           }}
-          title="Export menu dropdown"
+          title={t('export.menu')}
         >
           <ArrowDown color={COLORS.PURPLE} />
         </Button>
@@ -72,11 +73,11 @@ function ExportMenu({ onChange, exportSize, isVisible, toggleVisibility, exportI
         style={popoutStyle}
       >
         <div className="export-row">
-          <span className="filename">File name</span>
-          <Input ref={input} title="filename" placeholder="carbon" color={COLORS.PURPLE} />
+          <span className="filename">{t('export.fileName')}</span>
+          <Input ref={input} title={t('export.fileName')} placeholder="carbon" color={COLORS.PURPLE} />
         </div>
         <div className="export-row">
-          <span>Size</span>
+          <span>{t('export.size')}</span>
           <div className="flex">
             {EXPORT_SIZES.map(({ name }, i) => (
               <Button
@@ -100,10 +101,10 @@ function ExportMenu({ onChange, exportSize, isVisible, toggleVisibility, exportI
               exportImage('blob', { filename: input.current && input.current.value, open: true })
             }
           >
-            Open
+            {t('export.open')}
           </Button>
           <div className="save-container">
-            <span>Download</span>
+            <span>{t('export.download')}</span>
             <div>
               <Button
                 center

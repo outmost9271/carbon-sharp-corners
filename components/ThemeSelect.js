@@ -2,6 +2,7 @@ import React from 'react'
 import Toggle from './Toggle'
 import { None, BW, Sharp, Boxy } from './svg/WindowThemes'
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 const WINDOW_THEMES_MAP = { none: None, sharp: Sharp, bw: BW, boxy: Boxy }
 
@@ -58,7 +59,7 @@ class ThemeSelect extends React.Component {
       <>
         <div className="window-theme">
           <Toggle
-            label="Window controls"
+            label={t('settings.window.windowControls')}
             enabled={this.props.windowControls}
             onChange={v => this.props.onChange('windowControls', v)}
           />

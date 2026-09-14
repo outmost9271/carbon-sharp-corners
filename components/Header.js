@@ -1,17 +1,18 @@
 import React from 'react'
 import Logo from './svg/Logo'
+import { t } from '../lib/i18n'
 
 const Header = ({ enableHeroText }) => (
   <header role="banner" className="mb4">
     <div className="header-content">
-      <a id="link-home" href="/" aria-label="Home">
+      <a id="link-home" href="/" aria-label={t('header.home')}>
         <Logo />
       </a>
       {enableHeroText ? (
         <h2 className="mt3">
-          Create and share beautiful images of your source code.
+          {t('header.tagline')}
           <br />
-          Start typing or drop a file into the text area to get started.
+          {t('header.taglineHint')}
         </h2>
       ) : null}
     </div>

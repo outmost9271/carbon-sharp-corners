@@ -8,6 +8,7 @@ import ReferralLink from '../ReferralLink'
 import ThemeIcon from '../svg/Theme'
 import RemoveIcon from '../svg/Remove'
 import { COLORS } from '../../lib/constants'
+import { t } from '../../lib/i18n'
 
 const ThemeCreate = dynamic(() => import('./ThemeCreate'), {
   loading: () => null,
@@ -18,7 +19,7 @@ const ThemeItem = ({ children, item, isSelected, remove }) => (
     {children}
     {item.referral && (
       <div style={{ margin: `0 ${isSelected ? 8 : 0}px 0 8px` }}>
-        <ReferralLink href={item.referral}>Purchase</ReferralLink>
+        <ReferralLink href={item.referral}>{t('settings.editor.purchase')}</ReferralLink>
       </div>
     )}
     {item.custom && !isSelected && (
@@ -55,7 +56,7 @@ const ThemeItem = ({ children, item, isSelected, remove }) => (
 const themeIcon = <ThemeIcon />
 
 const getCustomName = themes =>
-  `Custom Theme ${themes.filter(({ name }) => name.startsWith('Custom Theme')).length + 1}`
+  `${t('theme.customPlaceholder')} ${themes.filter(({ name }) => name.startsWith(t('theme.customPlaceholder'))).length + 1}`
 
 class Themes extends React.PureComponent {
   state = {
@@ -102,7 +103,7 @@ class Themes extends React.PureComponent {
     const dropdownList = [
       {
         id: 'create',
-        name: 'Create +',
+        name: t('theme.create'),
       },
       ...themes,
     ]
@@ -110,7 +111,7 @@ class Themes extends React.PureComponent {
     return (
       <div className="themes" data-cy="themes-container">
         <Dropdown
-          title="Theme"
+          title={t('editor.theme')}
           innerRef={this.dropdown}
           icon={themeIcon}
           disableInput={isVisible}

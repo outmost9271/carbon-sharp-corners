@@ -7,6 +7,7 @@ import { COLORS } from '../lib/constants'
 import Button from './Button'
 import Popout, { managePopout } from './Popout'
 import CopySVG from './svg/Copy'
+import { t } from '../lib/i18n'
 
 const toIFrame = (url, width, height) =>
   `<iframe
@@ -39,7 +40,7 @@ function CopyEmbed({ mapper, title }) {
   const text = React.useMemo(() => mapper(asPath), [mapper, asPath])
   const { onClick, copied } = useCopyTextHandler(text)
 
-  return <CopyButton onClick={onClick}>{copied ? 'Copied!' : title}</CopyButton>
+  return <CopyButton onClick={onClick}>{copied ? t('copy.copied') : title}</CopyButton>
 }
 
 const popoutStyle = { width: '140px', right: 0 }
@@ -86,7 +87,7 @@ function CopyMenu({ isVisible, toggleVisibility, copyImage, carbonRef }) {
           margin="0 8px 0 0"
           onClick={toggleVisibility}
           color={COLORS.SECONDARY}
-          title="Copy menu"
+          title={t('copy.menu')}
         >
           <CopySVG size={16} color={COLORS.SECONDARY} />
         </Button>
@@ -98,10 +99,10 @@ function CopyMenu({ isVisible, toggleVisibility, copyImage, carbonRef }) {
         style={popoutStyle}
       >
         <div className="copy-row flex">
-          <span>Copy to clipboard</span>
+          <span>{t('copy.toClipboard')}</span>
           {clipboardSupported && (
             <CopyButton id="export-clipboard" onClick={copy} disabled={loading}>
-              {loading ? 'Copying…' : copied ? 'Copied!' : 'Image'}
+              {loading ? t('copy.copying') : copied ? t('copy.copied') : t('copy.image')}
             </CopyButton>
           )}
           <CopyEmbed title="Medium.com" mapper={toEncodedURL} />
@@ -109,7 +110,7 @@ function CopyMenu({ isVisible, toggleVisibility, copyImage, carbonRef }) {
             title="IFrame"
             mapper={url => toIFrame(url, carbonRef.clientWidth, carbonRef.clientHeight)}
           />
-          <CopyEmbed title="Plain URL" mapper={toURL} />
+          <CopyEmbed title={t('copy.plainURL')} mapper={toURL} />
         </div>
       </Popout>
       <style jsx>

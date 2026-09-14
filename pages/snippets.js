@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { zhCN } from 'date-fns/locale'
 import { useAsyncCallback } from 'actionsack'
 
 import Button from '../components/Button'
@@ -16,6 +17,7 @@ import { useAuth } from '../components/AuthContext'
 import { useAPI } from '../components/ApiContext'
 
 import { COLORS, DEFAULT_SETTINGS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 function correctTimestamp(n) {
   if (n < 9e12) {
@@ -42,7 +44,8 @@ function Snippet(props) {
         </div>
         <div className="id">{props.name || props.title || props.id}</div>
         <div className="meta">
-          Edited {formatDistanceToNow(correctTimestamp(props.updatedAt), { addSuffix: true })}
+          {t('snippets.editedPrefix')}{' '}
+          {formatDistanceToNow(correctTimestamp(props.updatedAt), { addSuffix: true, locale: zhCN })}
         </div>
       </div>
       <div className="overlay">
@@ -56,7 +59,7 @@ function Snippet(props) {
             padding="0.5rem 16px"
             color="#fff"
           >
-            Open ↗
+            {t('snippets.open')}
           </Button>
         </Link>
         <ConfirmButton
@@ -71,7 +74,7 @@ function Snippet(props) {
           hoverColor={COLORS.RED}
           onClick={props.deleteSnippet}
         >
-          Delete
+          {t('snippets.delete')}
         </ConfirmButton>
       </div>
       <style jsx>
@@ -219,7 +222,13 @@ function SnippetsPage() {
             Router.push('/')
           }}
         >
-          <h4>{loading ? 'Loading…' : !snippets.length ? 'Create snippet +' : 'Load more +'}</h4>
+          <h4>
+            {loading
+              ? t('snippets.loading')
+              : !snippets.length
+              ? t('snippets.create')
+              : t('snippets.loadMore')}
+          </h4>
         </ActionButton>
       )}
       <style jsx>

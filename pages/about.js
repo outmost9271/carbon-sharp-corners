@@ -1,5 +1,6 @@
 import React from 'react'
 import Page from '../components/Page'
+import { t } from '../lib/i18n'
 
 function Contributors() {
   const [contributors, setContributors] = React.useState([])
@@ -45,119 +46,104 @@ export default function About() {
     <Page>
       <div className="about">
         <div className="mb4">
-          <h2>What does this do?</h2>
-          <p>Carbon lets you create and share beautiful images of your source code</p>
+          <h2>{t('about.title')}</h2>
+          <p>{t('about.intro')}</p>
           <p>
-            You know all of those code screenshots you see on Twitter? Although the code&apos;s
-            usually impressive, we thought there was room for improvement in the aesthetic
-            department. So what are you waiting for? Go try it out and impress all your developer
-            and designer friends.{' '}
-            <span role="img" aria-label="Palette">
+            {t('about.description')}{' '}
+            <span role="img" aria-label={t('about.paletteAlt')}>
               🎨
             </span>
           </p>
         </div>
         <div className="mb4">
-          <h2>Who uses it?</h2>
+          <h2>{t('about.whoTitle')}</h2>
           <p>
-            Carbon is used by thousands of developers daily, including experts at:
+            {t('about.whoBodyPrefix')}
             <img
               className="mt2"
               width="508px"
               src="/static/svg/open-source-companies-2.svg"
-              alt="Companies that trust Carbon: Google, Airbnb, GitHub, Coinbase, and Microsoft"
+              alt={t('about.companiesAlt')}
             />
           </p>
         </div>
         <div className="mb4">
-          <h2>How do I use it?</h2>
-          <h4 className="mb0 mt3">Import</h4>
-          <p className="mb1 mt2">There are a few different ways to import code into Carbon:</p>
+          <h2>{t('about.howTitle')}</h2>
+          <h4 className="mb0 mt3">{t('about.import')}</h4>
+          <p className="mb1 mt2">{t('about.importIntro')}</p>
           <ul className="mt0 mb3">
-            <li>Drop a file into the editor</li>
+            <li>{t('about.importDrop')}</li>
             <li>
-              Append a GitHub gist id to the url (
+              {t('about.importGistPrefix')}
               <a className="link" href="/3208813b324d82a9ebd197e4b1c3bae8">
-                example
+                {t('about.importGistLink')}
               </a>
-              )
+              {t('about.importGistSuffix')}
             </li>
-            <li>Paste your code directly</li>
+            <li>{t('about.importPaste')}</li>
           </ul>
-          <h4 className="mb0 mt4">Customization</h4>
+          <h4 className="mb0 mt4">{t('about.customization')}</h4>
+          <p className="mt2 mb3">{t('about.customizationBody')}</p>
+          <p className="mt2 mb3">{t('about.customizationDrop')}</p>
+          <h4 className="mb0 mt4">{t('about.export')}</h4>
+          <p className="mt2 mb3">{t('about.exportBody')}</p>
           <p className="mt2 mb3">
-            Once you&apos;ve got all of your code into Carbon, you can customize your image by
-            changing the syntax theme, background color/image, window theme, or padding.
-          </p>
-          <p className="mt2 mb3">
-            You can even drop an image file onto the editor to set the background to that image.
-            Give it a try!
-          </p>
-          <h4 className="mb0 mt4">Export/Sharing</h4>
-          <p className="mt2 mb3">
-            After you&apos;ve customized your image you can Tweet a link to the image, or save it
-            directly.
-          </p>
-          <p className="mt2 mb3">
-            If you use the &apos;Tweet&apos; button, Carbon will automatically make your image
-            accessible. However, if you want to manually tweet your Carbon image, please check out (
+            {t('about.exportTweetPrefix')}
             <a
               className="link"
               href="https://help.twitter.com/en/using-twitter/picture-descriptions"
             >
-              how to make your Twitter images accessible
+              {t('about.exportTweetLink')}
             </a>
-            ).
+            {t('about.exportTweetSuffix')}
           </p>
           <p className="mt2 mb3">
-            If you include a Carbon image in a post, the source code will be invisible to assistive
-            technology — it will not be possible to enlarge or copy it, etc. Please, think about
-            adding another element with the source code as text, like (
+            {t('about.exportA11yPrefix')}
             <a
               className="link"
               href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"
             >
-              an HTML Details Element
+              {t('about.exportA11yLink')}
             </a>
-            ) below the image.
+            {t('about.exportA11ySuffix')}
           </p>
           <h4 className="mb0 mt4" id="shortcuts">
-            Keyboard Shortcuts
+            {t('about.shortcuts')}
           </h4>
           <table className="mt2 mb3">
             <tbody>
               <tr>
-                <td>Open settings menu</td>
+                <td>{t('about.shortcut.openSettings')}</td>
                 <td>
                   <kbd>⌘ /</kbd>
                 </td>
               </tr>
               <tr>
-                <td>Export as PNG</td>
+                <td>{t('about.shortcut.exportPng')}</td>
                 <td>
                   <kbd>⇧ ⌘ E</kbd>
                 </td>
               </tr>
               <tr>
-                <td>Export as SVG</td>
+                <td>{t('about.shortcut.exportSvg')}</td>
                 <td>
                   <kbd>⇧ ⌘ S</kbd>
                 </td>
               </tr>
               <tr>
-                <td>Save snippet</td>
+                <td>{t('about.shortcut.saveSnippet')}</td>
                 <td>
                   <kbd>⌥ S</kbd>
                 </td>
               </tr>
               <tr>
-                <td>Copy image to clipboard</td>
+                <td>{t('about.shortcut.copyImage')}</td>
                 <td>
                   <kbd>⇧ ⌘ C</kbd>
                 </td>
               </tr>
               <tr>
-                <td>Reset settings</td>
+                <td>{t('about.shortcut.reset')}</td>
                 <td>
                   <kbd>⇧ ⌘ \</kbd>
                 </td>
@@ -166,10 +152,10 @@ export default function About() {
           </table>
         </div>
         <div>
-          <h2>I want to make this better.</h2>
+          <h2>{t('about.improveTitle')}</h2>
           <p>
             <a className="link" href="https://github.com/carbon-app/carbon#contribute--support">
-              Contributors welcome!
+              {t('about.contributors')}
             </a>
           </p>
           <br />

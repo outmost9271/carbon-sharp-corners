@@ -4,6 +4,7 @@ import { THEMES, THEMES_HASH, COLORS } from '../lib/constants'
 import Reset from './style/Reset'
 import Font from './style/Font'
 import Typography from './style/Typography'
+import { t } from '../lib/i18n'
 
 const CODEMIRROR_VERSION = '5.65.5'
 
@@ -43,8 +44,8 @@ export const CodeMirrorLink = () => (
 )
 
 const title = 'Carbon'
-const description =
-  'Carbon is the easiest way to create and share beautiful images of your source code.'
+const pageTitle = t('meta.title')
+const description = t('meta.description')
 export const MetaTags = React.memo(() => (
   <Head>
     <meta charSet="utf-8" />
@@ -61,7 +62,7 @@ export const MetaTags = React.memo(() => (
     <meta name="og:image" content="/static/brand/banner.png" />
     <meta name="theme-color" content={COLORS.BLACK} />
     <meta name="apple-mobile-web-app-status-bar-style" content={COLORS.BLACK} />
-    <title>{title} | Create and share beautiful images of your source code</title>
+    <title>{pageTitle}</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png" />

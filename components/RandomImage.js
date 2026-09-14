@@ -4,6 +4,7 @@ import { useAsyncCallback } from 'actionsack'
 import { Spinner } from './Spinner'
 import { useAPI } from './ApiContext'
 import PhotoCredit from './PhotoCredit'
+import { t } from '../lib/i18n'
 
 function RandomImage(props) {
   const cacheRef = React.useRef([])
@@ -43,7 +44,7 @@ function RandomImage(props) {
     <div className="random-image-container">
       <div className="controls">
         <button disabled={loading} onClick={selectImage}>
-          Use Image
+          {t('common.useImage')}
         </button>
         <button disabled={loading} onClick={() => updateIndex(i => i + 1)}>
           Try Another

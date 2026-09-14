@@ -2,36 +2,37 @@ import React from 'react'
 import Link from 'next/link'
 
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 const Footer = () => (
   <footer role="contentinfo" className="mt3">
     <nav className="mt3">
       <Link href="/about" prefetch={false}>
         <a className="link" href="/about">
-          about
+          {t('footer.about')}
         </a>
       </Link>
       <a className="link" href="https://github.com/carbon-app/carbon">
-        source
+        {t('footer.source')}
       </a>
       <a className="link" href="/terms">
-        terms
+        {t('footer.terms')}
       </a>
       <a className="link" href="/privacy">
-        privacy
+        {t('footer.privacy')}
       </a>
       <a className="link" href="/offsets">
-        offsets
+        {t('footer.offsets')}
       </a>
       {/* <span className="new">New</span> */}
     </nav>
 
     <div className="mt2 mb2">
-      created by{' '}
+      {t('footer.createdByPrefix')}{' '}
       <a className="author-link" href="https://twitter.com/carbon_app">
         @carbon_app
       </a>{' '}
-      ¬
+      {t('footer.createdBySuffix')} ¬
     </div>
     <style jsx>
       {`

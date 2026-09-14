@@ -8,6 +8,7 @@ import Input from './Input'
 import Toggle from './Toggle'
 import { Link } from './Meta'
 import { fileToDataURL } from '../lib/util'
+import { t } from '../lib/i18n'
 import ApiContext from './ApiContext'
 
 const getCroppedImg = (imageDataURL, pixelCrop) => {
@@ -117,8 +118,7 @@ export default class ImagePicker extends React.Component {
       .catch(err => {
         if (err.message.indexOf('Network Error') > -1) {
           this.setState({
-            error:
-              'Fetching the image failed. This is probably a CORS-related issue. You can either enable CORS in your browser, or use another image.',
+            error: t('background.corsError'),
           })
         }
       })
@@ -175,18 +175,18 @@ export default class ImagePicker extends React.Component {
     let content = (
       <div>
         <div className="choose-image">
-          <span>Upload a background image:</span>
+          <span>{t('background.uploadPrompt')}</span>
           <button
             className={this.state.mode === 'file' ? 'active' : 'none'}
             onClick={this.selectMode.bind(this, 'file')}
           >
-            File
+            {t('background.file')}
           </button>
           <button
             className={this.state.mode === 'url' ? 'active' : 'none'}
             onClick={this.selectMode.bind(this, 'url')}
           >
-            URL
+            {t('background.url')}
           </button>
           {this.state.mode === 'file' ? (
             <Input
@@ -196,8 +196,13 @@ export default class ImagePicker extends React.Component {
             />
           ) : (
             <form onSubmit={this.handleURLInput}>
-              <Input type="text" title="Background Image" placeholder="Image URL…" align="left" />
-              <button type="submit">Upload</button>
+              <Input
+                type="text"
+                title={t('background.backgroundImage')}
+                placeholder={t('background.imageURL')}
+                align="left"
+              />
+              <button type="submit">{t('background.upload')}</button>
             </form>
           )}
           {this.state.error && <span className="error">{this.state.error}</span>}
@@ -205,7 +210,8 @@ export default class ImagePicker extends React.Component {
         <hr />
         <div className="random-image">
           <span>
-            Or use a random <a href="https://unsplash.com/">Unsplash</a> image:
+            {t('background.randomImagePrefix')} <a href="https://unsplash.com/">Unsplash</a>{' '}
+            {t('background.randomImageSuffix')}
           </span>
           <RandomImage onChange={this.selectImage} />
           <GeneratePaletteSetting onChange={value => (this.generateColorPalette = value)} />
@@ -277,7 +283,7 @@ export default class ImagePicker extends React.Component {
         <div className="settings-container">
           <div className="image-container">
             <div className="label">
-              <span>Background image</span>
+              <span>{t('background.backgroundImage')}</span>
               <button onClick={this.removeImage}>&times;</button>
             </div>
             <ReactCrop
@@ -357,7 +363,7 @@ function GeneratePaletteSetting({ onChange }) {
 
   return (
     <Toggle
-      label="Generate color palette (beta)"
+      label={t('background.generatePalette')}
       enabled={enabled}
       onChange={setEnabled}
       padding="8px 0 0"

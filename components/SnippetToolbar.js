@@ -10,6 +10,7 @@ import { Down as ArrowDown } from './svg/Arrows'
 import { useAuth } from './AuthContext'
 
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 
 const popoutStyle = { width: '120px', right: -8, top: 40 }
 
@@ -27,7 +28,7 @@ function DeleteButton(props) {
       onClick={onClick}
       style={{ color: COLORS.RED }}
     >
-      {loading ? 'Deleting…' : 'Delete'}
+      {loading ? t('snippets.deleting') : t('snippets.delete')}
     </ConfirmButton>
   )
 }
@@ -44,10 +45,10 @@ function DuplicateButton(props) {
       onClick={onClick}
       data-cy="duplicate-button"
       style={{ minWidth: 92 }}
-      title="Duplicate"
+      title={t('snippets.duplicate')}
       disabled={loading}
     >
-      {loading ? 'Duplicating…' : 'Duplicate'}
+      {loading ? t('snippets.duplicating') : t('snippets.duplicate')}
     </Button>
   )
 }
@@ -74,10 +75,10 @@ function SaveButton({ loading, onClick, sameUser }) {
         borderBottomRightRadius: sameUser ? 0 : undefined,
         borderTopRightRadius: sameUser ? 0 : undefined,
       }}
-      title="Save"
+      title={t('snippets.save')}
       disabled={loading}
     >
-      {loading ? 'Saving…' : 'Save'}
+      {loading ? t('snippets.saving') : t('snippets.save')}
     </Button>
   )
 }
@@ -118,7 +119,7 @@ function SnippetToolbar({ toggleVisibility, isVisible, snippet, ...props }) {
       <div style={{ marginRight: 'auto' }}>
         <Input
           align="left"
-          placeholder="Add a name…"
+          placeholder={t('snippets.addName')}
           fontSize="14px"
           value={props.name}
           onChange={e => props.onChange('name', e.target.value)}
@@ -132,7 +133,7 @@ function SnippetToolbar({ toggleVisibility, isVisible, snippet, ...props }) {
         )}
         {sameUser && (
           <Button
-            title="Save menu dropdown"
+            title={t('snippets.saveMenu')}
             border
             large
             center

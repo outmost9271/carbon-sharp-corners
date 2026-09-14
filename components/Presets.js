@@ -4,6 +4,7 @@ import Button from './Button'
 import { COLORS, DEFAULT_PRESETS } from '../lib/constants'
 import * as Arrows from './svg/Arrows'
 import Remove from './svg/Remove'
+import { t } from '../lib/i18n'
 
 const removeButtonStyles = {
   position: 'absolute',
@@ -80,7 +81,7 @@ const Presets = React.memo(
     return (
       <div className="settings-presets">
         <div className="settings-presets-header">
-          <span>Presets</span>
+          <span>{t('settings.presets.title')}</span>
           {show && (
             <Button
               margin="0 0 0 8px"
@@ -91,7 +92,7 @@ const Presets = React.memo(
               onClick={create}
               disabled={disabledCreate}
             >
-              create +
+              {t('settings.presets.create')}
             </Button>
           )}
           <Button center onClick={toggle} style={arrowButtonStyle} hoverBackground={COLORS.BLACK}>
@@ -121,7 +122,7 @@ const Presets = React.memo(
         )}
         {show && applied && (
           <div className="settings-presets-applied">
-            <span>Preset applied!</span>
+            <span>{t('settings.presets.applied')}</span>
             <Button
               center
               flex="0"
@@ -130,7 +131,7 @@ const Presets = React.memo(
               hoverBackground="transparent"
               background="transparent"
             >
-              undo <span>&#x21A9;</span>
+              {t('settings.presets.undo')} <span>&#x21A9;</span>
             </Button>
           </div>
         )}

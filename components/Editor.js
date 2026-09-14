@@ -18,6 +18,7 @@ import CopyMenu from './CopyMenu'
 import Themes from './Themes'
 import FontFace from './FontFace'
 import LanguageIcon from './svg/Language'
+import { t } from '../lib/i18n'
 import {
   LANGUAGES,
   LANGUAGE_MIME_HASH,
@@ -37,6 +38,20 @@ import { getSettings, unescapeHtml, formatCode, omit } from '../lib/util'
 import domtoimage from '../lib/dom-to-image'
 
 const languageIcon = <LanguageIcon />
+
+// 语言下拉中的通用项（Auto / Plain Text）按界面语言显示
+const translatedLanguageCache = new Map()
+const displayLanguage = lang => {
+  if (!lang) return lang
+  if (!translatedLanguageCache.has(lang)) {
+    let name = lang.name
+    if (name === 'Auto') name = t('language.auto')
+    else if (name === 'Plain Text') name = t('language.plainText')
+    translatedLanguageCache.set(lang, name === lang.name ? lang : { ...lang, name })
+  }
+  return translatedLanguageCache.get(lang)
+}
+const LANGUAGE_LIST = LANGUAGES.map(displayLanguage)
 
 const SnippetToolbar = dynamic(() => import('./SnippetToolbar'), {
   loading: () => null,
@@ -295,7 +310,7 @@ class Editor extends React.Component {
       .then(() =>
         this.props.setToasts({
           type: 'SET',
-          toasts: [{ children: 'Snippet created', timeout: 3000 }],
+          toasts: [{ children: t('snippets.created'), timeout: 3000 }],
         })
       )
 
@@ -303,7 +318,7 @@ class Editor extends React.Component {
     this.context.snippet.update(this.props.snippet.id, this.state).then(() =>
       this.props.setToasts({
         type: 'SET',
-        toasts: [{ children: 'Snippet saved', timeout: 3000 }],
+        toasts: [{ children: t('snippets.saved'), timeout: 3000 }],
       })
     )
 
@@ -314,7 +329,7 @@ class Editor extends React.Component {
       .then(() =>
         this.props.setToasts({
           type: 'SET',
-          toasts: [{ children: 'Snippet deleted', timeout: 3000 }],
+          toasts: [{ children: t('snippets.deleted'), timeout: 3000 }],
         })
       )
 
@@ -347,15 +362,15 @@ class Editor extends React.Component {
             themes={this.props.themes}
           />
           <Dropdown
-            title="Language"
+            title={t('editor.language')}
             icon={languageIcon}
-            selected={
+            selected={displayLanguage(
               LANGUAGE_NAME_HASH[language] ||
-              LANGUAGE_MIME_HASH[language] ||
-              LANGUAGE_MODE_HASH[language] ||
-              LANGUAGE_MODE_HASH[DEFAULT_LANGUAGE]
-            }
-            list={LANGUAGES}
+                LANGUAGE_MIME_HASH[language] ||
+                LANGUAGE_MODE_HASH[language] ||
+                LANGUAGE_MODE_HASH[DEFAULT_LANGUAGE]
+            )}
+            list={LANGUAGE_LIST}
             onChange={this.updateLanguage}
           />
           <div className="toolbar-second-row">
@@ -394,7 +409,7 @@ class Editor extends React.Component {
           {({ canDrop }) => (
             <Overlay
               isOver={canDrop}
-              title={`Drop your file here to import ${canDrop ? '✋' : '✊'}`}
+              title={t('editor.dropFile', { icon: canDrop ? '✋' : '✊' })}
             >
               {/*key ensures Carbon's internal language state is updated when it's changed by Dropdown*/}
               <Carbon

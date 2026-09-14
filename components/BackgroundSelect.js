@@ -6,6 +6,7 @@ import Button from './Button'
 import Popout, { managePopout } from './Popout'
 import { COLORS, DEFAULT_BG_COLOR } from '../lib/constants'
 import { stringifyColor } from '../lib/util'
+import { t } from '../lib/i18n'
 
 function validateColor(str) {
   if (/#\d{3,6}|rgba{0,1}\(.*?\)/gi.test(str) || /\w+/gi.test(str)) {
@@ -41,7 +42,7 @@ class BackgroundSelect extends React.PureComponent {
     return (
       <div className="bg-select-container">
         <Button
-          title="Background Menu"
+          title={t('background.menu')}
           border
           center
           selected={isVisible}

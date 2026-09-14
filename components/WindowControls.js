@@ -2,6 +2,7 @@ import React from 'react'
 import { useCopyTextHandler } from 'actionsack'
 
 import { COLORS } from '../lib/constants'
+import { t } from '../lib/i18n'
 import { Controls, ControlsBW, ControlsBoxy } from './svg/Controls'
 import CopySVG from './svg/Copy'
 import CheckMark from './svg/Checkmark'
@@ -12,7 +13,7 @@ const CopyButton = React.memo(function CopyButton({ text }) {
   const { onClick, copied } = useCopyTextHandler(text)
 
   return (
-    <button onClick={onClick} aria-label="Copy Button">
+    <button onClick={onClick} aria-label={t('copy.button')}>
       {copied ? (
         <CheckMark color={COLORS.GRAY} width={size} height={size} />
       ) : (
@@ -42,7 +43,7 @@ export function TitleBar({ light, value, onChange }) {
   return (
     <div>
       <input
-        aria-label="Image title"
+        aria-label={t('window.imageTitle')}
         type="text"
         spellCheck="false"
         value={value || ''}

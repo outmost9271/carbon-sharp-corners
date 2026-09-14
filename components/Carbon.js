@@ -12,6 +12,7 @@ hljs.registerLanguage('javascript', javascript)
 import { Spinner } from './Spinner'
 import WindowControls from './WindowControls'
 import WidthHandler from './WidthHandler'
+import { t } from '../lib/i18n'
 
 import {
   COLORS,
@@ -154,7 +155,7 @@ class Carbon extends React.PureComponent {
     )
 
     const options = {
-      screenReaderLabel: 'Code editor',
+      screenReaderLabel: t('editor.codeEditor'),
       lineNumbers: config.lineNumbers,
       firstLineNumber: config.firstLineNumber,
       mode: languageMode || 'plaintext',
